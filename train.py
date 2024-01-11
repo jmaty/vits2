@@ -3,6 +3,7 @@ import json
 import argparse
 import itertools
 import math
+import scipy
 
 # 👇️ disable numba and tensorflow warnings
 import logging
@@ -261,6 +262,9 @@ def run(rank, n_gpus, hps):
 
     scaler = GradScaler(enabled=hps.train.fp16_run)
 
+    # Create test audio dir under log/eval dir
+    os.makedirs(os.path.join(writer_eval.log_dir, hps.data.eval_audios), exist_ok=True)
+
     for epoch in range(epoch_str, hps.train.epochs + 1):
         if rank == 0:
             train_and_evaluate(
@@ -510,7 +514,7 @@ def train_and_evaluate(
                 )
 
             if global_step % hps.train.eval_interval == 0:
-                evaluate(hps, net_g, eval_loader, writer_eval)
+                evaluate(hps, net_g, eval_loader, writer_eval, epoch)
                 utils.save_checkpoint(
                     net_g,
                     optim_g,
@@ -540,8 +544,11 @@ def train_and_evaluate(
         logger.info("====> Epoch: {}".format(epoch))
 
 
-def evaluate(hps, generator, eval_loader, writer_eval):
+def evaluate(hps, generator, eval_loader, writer_eval, epoch=0):
     generator.eval()
+
+    save_dir = os.path.join(writer_eval.log_dir, hps.data.eval_audios)
+
     with torch.no_grad():
         for batch_idx, (x, x_lengths, spec, spec_lengths, y, y_lengths) in enumerate(
             eval_loader
@@ -582,10 +589,25 @@ def evaluate(hps, generator, eval_loader, writer_eval):
             hps.data.mel_fmin,
             hps.data.mel_fmax,
         )
+
+        audio = y_hat[0, 0, : y_hat_lengths[0]].cpu().numpy()
+        # audio_gt = y[0, 0, : y_lengths[0]].cpu().numpy()
+        scipy.io.wavfile.write(
+            filename=os.path.join(save_dir, f"{epoch:05d}-{batch_idx}.wav"),
+            rate=hps.data.sampling_rate,
+            data=audio,
+        )
+        # scipy.io.wavfile.write(
+        #     filename=os.path.join(save_dir, f"{batch_idx}_gt.wav"),
+        #     rate=hps.data.sampling_rate,
+        #     data=audio_gt,
+        # )
+
     image_dict = {
         "gen/mel": utils.plot_spectrogram_to_numpy(y_hat_mel[0].cpu().numpy())
     }
     audio_dict = {"gen/audio": y_hat[0, :, : y_hat_lengths[0]]}
+
     if global_step == 0:
         image_dict.update(
             {"gt/mel": utils.plot_spectrogram_to_numpy(mel[0].cpu().numpy())}
