@@ -452,6 +452,7 @@ def train_and_evaluate(
                     )
                 )
                 # JMa: print losses, global step and learning rate
+                # [loss_dics, loss_gen, loss_fm, loss_mel, loss_dur, loss_kl, global_step, lr]
                 logger.info([x.item() for x in losses] + [global_step, lr])
 
                 scalar_dict = {
