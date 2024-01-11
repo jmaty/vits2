@@ -3,6 +3,12 @@ import json
 import argparse
 import itertools
 import math
+
+# 👇️ disable numba and tensorflow warnings
+import logging
+logging.getLogger('numba').setLevel(logging.WARNING)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 import torch
 from torch import nn, optim
 from torch.nn import functional as F
@@ -30,7 +36,6 @@ from models import (
 from losses import generator_loss, discriminator_loss, feature_loss, kl_loss
 from mel_processing import mel_spectrogram_torch, spec_to_mel_torch
 from text.symbols import symbols
-
 
 torch.backends.cudnn.benchmark = True
 global_step = 0
@@ -162,7 +167,7 @@ def run(rank, n_gpus, hps):
         and hps.model.use_duration_discriminator == True
     ):
         # print("Using duration discriminator for VITS2")
-        use_duration_discriminator = True
+        # use_duration_discriminator = True
         duration_discriminator_type = hps.model.duration_discriminator_type
         print(f"Using duration_discriminator {duration_discriminator_type} for VITS2")
         assert duration_discriminator_type in AVAILABLE_DURATION_DISCRIMINATOR_TYPES, f"duration_discriminator_type must be one of {AVAILABLE_DURATION_DISCRIMINATOR_TYPES}"
@@ -442,6 +447,7 @@ def train_and_evaluate(
                         epoch, 100.0 * batch_idx / len(train_loader)
                     )
                 )
+                # JMa: print losses, global step and learning rate
                 logger.info([x.item() for x in losses] + [global_step, lr])
 
                 scalar_dict = {
