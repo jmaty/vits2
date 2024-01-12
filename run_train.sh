@@ -2,7 +2,7 @@
 set -e
 
 if [[ "$#" -lt 2 ]]; then
-     echo "Usage: batch_run.sh run_name config_path [runs]"
+     echo "Usage: run_train.sh run_name config_path [runs]"
      exit 1
 fi
 
@@ -18,7 +18,7 @@ if [[ "$#" -gt 2 ]]; then
 fi
 
 WALLTIME="-l walltime=24:00:00"
-SELECT="-l select=1:ncpus=2:ngpus=1:mem=64gb:gpu_mem=400gb:scratch_local=10gb"
+SELECT="-l select=1:ncpus=2:ngpus=1:mem=64gb:gpu_mem=40gb:scratch_local=20gb"
 DEPS=""
 PREV_JOBID=""
 
