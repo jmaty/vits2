@@ -1,13 +1,13 @@
 {
     "train": {
       "log_interval": 200,
-      "eval_interval": 1000,
+      "eval_interval": 5000,
       "seed": 1234,
-      "epochs": 20000,
+      "epochs": 2000,
       "learning_rate": 2e-4,
       "betas": [0.8, 0.99],
       "eps": 1e-9,
-      "batch_size": 16,
+      "batch_size": 48,
       "fp16_run": false,
       "lr_decay": 0.999875,
       "segment_size": 8192,
@@ -31,7 +31,8 @@
       "mel_fmax": null,
       "add_blank": false,
       "n_speakers": 0,
-      "cleaned_text": true
+      "cleaned_text": true,
+      "eval_audio_folder": "eval_audios"
     },
     "model": {
       "use_mel_posterior_encoder": true,
@@ -55,7 +56,8 @@
       "upsample_initial_channel": 512,
       "upsample_kernel_sizes": [16,16,4,4],
       "n_layers_q": 3,
-      "use_spectral_norm": false
+      "use_spectral_norm": false,
+      "use_sdp": true
     }
   }
   
