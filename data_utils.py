@@ -11,6 +11,7 @@ from mel_processing import (mel_spectrogram_torch, spec_to_mel_torch,
                             spectrogram_torch)
 from text import cleaned_text_to_sequence, text_to_sequence
 from utils import load_filepaths_and_text, load_wav_to_torch
+from text.symbols import symbols
 
 
 class TextAudioLoader(torch.utils.data.Dataset):
@@ -41,6 +42,8 @@ class TextAudioLoader(torch.utils.data.Dataset):
         self.add_blank = hparams.add_blank
         self.min_text_len = getattr(hparams, "min_text_len", 1)
         self.max_text_len = getattr(hparams, "max_text_len", 190)
+
+        self.text_symbols = symbols(hparams)
 
         random.seed(1234)
         random.shuffle(self.audiopaths_and_text)
@@ -123,9 +126,9 @@ class TextAudioLoader(torch.utils.data.Dataset):
 
     def get_text(self, text):
         if self.cleaned_text:
-            text_norm = cleaned_text_to_sequence(text)
+            text_norm = cleaned_text_to_sequence(text, self.text_symbols)
         else:
-            text_norm = text_to_sequence(text, self.text_cleaners)
+            text_norm = text_to_sequence(text, self.text_cleaners, self.text_symbols)
         if self.add_blank:
             text_norm = commons.intersperse(text_norm, 0)
         text_norm = torch.LongTensor(text_norm)
@@ -237,6 +240,8 @@ class TextAudioSpeakerLoader(torch.utils.data.Dataset):
         self.max_text_len = getattr(hparams, "max_text_len", 190)
         self.min_audio_len = getattr(hparams, "min_audio_len", 8192)
 
+        self.text_symbols = symbols(hparams)
+
         random.seed(1234)
         random.shuffle(self.audiopaths_sid_text)
         self._filter()
@@ -331,9 +336,9 @@ class TextAudioSpeakerLoader(torch.utils.data.Dataset):
 
     def get_text(self, text):
         if self.cleaned_text:
-            text_norm = cleaned_text_to_sequence(text)
+            text_norm = cleaned_text_to_sequence(text, self.text_symbols)
         else:
-            text_norm = text_to_sequence(text, self.text_cleaners)
+            text_norm = text_to_sequence(text, self.text_cleaners, self.text_symbols)
         if self.add_blank:
             text_norm = commons.intersperse(text_norm, 0)
         text_norm = torch.LongTensor(text_norm)
