@@ -18,7 +18,7 @@ if [[ "$#" -gt 2 ]]; then
 fi
 
 WALLTIME="-l walltime=24:00:00"
-SELECT="-l select=1:ncpus=2:ngpus=1:mem=64gb:gpu_mem=40gb:scratch_local=20gb"
+SELECT="-l select=1:ncpus=2:ngpus=1:mem=96gb:gpu_mem=40gb:scratch_local=20gb"
 DEPS=""
 PREV_JOBID=""
 

@@ -101,7 +101,7 @@ def run(rank, n_gpus, hps):
     collate_fn = TextAudioCollate()
     train_loader = DataLoader(
         train_dataset,
-        num_workers=8,
+        num_workers=2,
         shuffle=False,
         pin_memory=True,
         collate_fn=collate_fn,
@@ -111,7 +111,7 @@ def run(rank, n_gpus, hps):
         eval_dataset = TextAudioLoader(hps.data.validation_files, hps.data)
         eval_loader = DataLoader(
             eval_dataset,
-            num_workers=8,
+            num_workers=2,
             shuffle=False,
             batch_size=hps.train.batch_size,
             pin_memory=True,
