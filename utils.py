@@ -172,9 +172,14 @@ def load_wav_to_torch(full_path):
     return torch.FloatTensor(data.astype(np.float32)), sampling_rate
 
 
-def load_filepaths_and_text(filename, split="|"):
+def load_filepaths_and_text(filename, split="|", dataset_path="", audio_ext=".wav"):
+    filepaths_and_text = []
     with open(filename, encoding="utf-8") as f:
-        filepaths_and_text = [line.strip().split(split) for line in f]
+        # filepaths_and_text = [line.strip().split(split) for line in f]
+        for line in f:
+            audio, text = line.strip().split(split)
+            # Add path to wav and extension
+            filepaths_and_text.append([os.path.join(dataset_path, "wavs", audio+audio_ext), text])
     return filepaths_and_text
 
 
