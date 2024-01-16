@@ -75,7 +75,8 @@ class TextAudioLoader(torch.utils.data.Dataset):
 
     def get_audio(self, filename):
         # TODO : if linear spec exists convert to mel from existing linear spec
-        audio, sampling_rate = load_wav_to_torch(filename)
+        # Adding dataset path and extension to the audio filename
+        audio, sampling_rate = load_wav_to_torch(os.path.join(self.hparams.data.dataset_path, "wavs", filename+".wav"))
         if sampling_rate != self.sampling_rate:
             raise ValueError(
                 "{} {} SR doesn't match target {} SR".format(
