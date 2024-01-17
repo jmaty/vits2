@@ -563,9 +563,10 @@ def evaluate(hps, generator, eval_loader, writer_eval, logger, epoch=0):
             spec_lengths = spec_lengths[:1]
             y = y[:1]
             y_lengths = y_lengths[:1]
-            # break
         
-            y_hat, attn, mask, *_ = generator.module.infer(x, x_lengths, max_len=1000)
+            ## JMa: Do not shorten generated wav
+            # y_hat, attn, mask, *_ = generator.module.infer(x, x_lengths, max_len=1000)
+            y_hat, _, mask, *_ = generator.module.infer(x, x_lengths)
             y_hat_lengths = mask.sum([1, 2]).long() * hps.data.hop_length
 
             if hps.model.use_mel_posterior_encoder or hps.data.use_mel_posterior_encoder:
