@@ -45,7 +45,7 @@ class TextAudioLoader(torch.utils.data.Dataset):
 
         self.text_symbols = symbols(hparams)
 
-        random.seed(1234)
+        random.seed(hparams.seed)
         random.shuffle(self.audiopaths_and_text)
         self._filter()
 
@@ -243,7 +243,7 @@ class TextAudioSpeakerLoader(torch.utils.data.Dataset):
 
         self.text_symbols = symbols(hparams)
 
-        random.seed(1234)
+        random.seed(hparams.seed)
         random.shuffle(self.audiopaths_sid_text)
         self._filter()
 
