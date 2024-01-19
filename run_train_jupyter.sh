@@ -97,7 +97,7 @@ EXP=$(grep 'run_name:' "$CFG" | sed -r 's/run_name: "(.+)"/\1/')
 # Timestep to differentiate among runs with the same run name
 TIMESTEP=$(date +"%y%m%d_%H%M%S")
 
-SINGULARITY=/storage/plzen4-ntis/projects/singularity/papermill_23.12-r3.sh
+SINGULARITY=/storage/plzen4-ntis/projects/singularity/papermill_23.12-latest.sh
 
 # -----------------------------------------------------------------------------
 # RUN TRAINING

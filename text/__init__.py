@@ -47,6 +47,7 @@ def cleaned_text_to_sequence(cleaned_text, symbols):
             symbol_id = symbol_to_id[symbol]
             sequence += [symbol_id]
         else:
+            print(f"[!] Undefined symbol {symbol} in: {cleaned_text}")
             continue
     return sequence
 

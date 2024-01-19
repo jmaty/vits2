@@ -512,6 +512,7 @@ def train_and_evaluate(
                     global_step=global_step,
                     images=image_dict,
                     scalars=scalar_dict,
+                    audio_sampling_rate=hps.data.sampling_rate,
                 )
 
             if global_step % hps.train.eval_interval == 0:
