@@ -35,7 +35,7 @@ if [[ "$#" -gt 4 ]]; then
      #  Number of runs
      RUNS=$5
 fi
-if [[ "$#" -gt 6 ]]; then
+if [[ "$#" -gt 5 ]]; then
      # JOBID to continue run
      JOBID=$6
 fi
