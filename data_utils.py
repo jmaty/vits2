@@ -11,7 +11,7 @@ from mel_processing import (mel_spectrogram_torch, spec_to_mel_torch,
                             spectrogram_torch)
 from text import cleaned_text_to_sequence, text_to_sequence
 from utils import load_filepaths_and_text, load_wav_to_torch
-from text.symbols import symbols
+# from text.symbols import symbols
 
 
 class TextAudioLoader(torch.utils.data.Dataset):
@@ -43,7 +43,8 @@ class TextAudioLoader(torch.utils.data.Dataset):
         self.min_text_len = getattr(hparams, "min_text_len", 1)
         self.max_text_len = getattr(hparams, "max_text_len", 190)
 
-        self.text_symbols = symbols(hparams)
+        # self.text_symbols = symbols(hparams)
+        self.text_symbols = [hparams.pad] + list(hparams.punctuation) + list(hparams.characters)
 
         random.seed(hparams.seed)
         random.shuffle(self.audiopaths_and_text)
@@ -241,7 +242,8 @@ class TextAudioSpeakerLoader(torch.utils.data.Dataset):
         self.max_text_len = getattr(hparams, "max_text_len", 190)
         self.min_audio_len = getattr(hparams, "min_audio_len", 8192)
 
-        self.text_symbols = symbols(hparams)
+        # self.text_symbols = symbols(hparams)
+        self.text_symbols = [hparams.pad] + list(hparams.punctuation) + list(hparams.characters)
 
         random.seed(hparams.seed)
         random.shuffle(self.audiopaths_sid_text)

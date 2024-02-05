@@ -194,7 +194,8 @@ def run(rank, n_gpus, hps):
         use_duration_discriminator = False
 
     net_g = SynthesizerTrn(
-        len(symbols(hps.data)),
+        # len(symbols(hps.data)),
+        len(train_dataset.text_symbols),
         posterior_channels,
         hps.train.segment_size // hps.data.hop_length,
         mas_noise_scale_initial=mas_noise_scale_initial,
