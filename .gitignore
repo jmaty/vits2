@@ -17,5 +17,7 @@ monotonic_align/monotonic_align
 
 output_logs
 output_notebooks
+output_wavs
+test_files
 datasets
 configs
